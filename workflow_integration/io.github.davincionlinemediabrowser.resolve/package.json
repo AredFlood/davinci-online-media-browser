@@ -1,0 +1,10 @@
+{
+  "name": "davinci-online-media-browser-workflow-integration",
+  "version": "0.2.0",
+  "description": "DaVinci Resolve Workflow Integration wrapper for the Online Media Browser.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "check": "node --check main.js && node --check preload.js"
+  }
+}

@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+.venv/
+venv/
+dist/
+api_keys.json
+settings.json
+wfi-window-state.json
+media_cache/
+*.part
+WorkflowIntegration.node
+runtime-config.json

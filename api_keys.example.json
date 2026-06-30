@@ -1,0 +1,21 @@
+{
+  "cache_dir": "~/.davinci_plugins/cache",
+  "license_policy": {
+    "allow_non_commercial": false,
+    "require_attribution_confirmation": true
+  },
+  "pexels": {
+    "api_key": ""
+  },
+  "pixabay": {
+    "api_key": ""
+  },
+  "freesound": {
+    "client_id": "",
+    "client_secret_or_api_key": "",
+    "oauth_access_token": ""
+  },
+  "mixkit": {
+    "enabled": true
+  }
+}

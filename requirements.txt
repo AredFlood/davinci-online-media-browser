@@ -1,0 +1,6 @@
+# Runtime dependencies for the Web / Workflow Integration version.
+#
+# The local API server uses Python's standard library. certifi is optional but
+# recommended because DaVinci Resolve's bundled Python on macOS can miss modern
+# CA certificates.
+certifi>=2024.2.2

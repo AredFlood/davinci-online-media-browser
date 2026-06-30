@@ -1,0 +1,83 @@
+"""UI string tables for the English / Chinese language toggle."""
+from __future__ import annotations
+
+LANGUAGES = [("zh", "中文"), ("en", "English")]
+
+TRANSLATIONS: dict[str, dict[str, str]] = {
+    "en": {
+        "search_placeholder": "Search stock media (Chinese is auto-translated)",
+        "search": "Search",
+        "type": "Type",
+        "license": "License",
+        "language": "Language",
+        "import": "Import to Media Pool",
+        "cancel": "Cancel",
+        "cancelling": "Cancelling…",
+        "searching": "Searching…",
+        "searching_sources": "Searching sources…",
+        "select_asset": "Select an asset",
+        "no_asset": "No asset selected",
+        "no_results": "No results",
+        "no_results_hint": "Try another keyword or configure missing API keys.",
+        "no_filter_match": "No results for this license filter",
+        "no_filter_match_hint": "Relax the license filter or try another keyword.",
+        "source_warnings": "Source warnings",
+        "preparing": "Preparing download…",
+        "enter_term": "Enter a search term.",
+        "cat_all": "All",
+        "cat_auto": "Auto",
+        "cat_video": "Video",
+        "cat_image": "Image",
+        "cat_music": "Music",
+        "cat_sfx": "SFX",
+        "cat_3d": "3D",
+        "lic_all": "All licenses",
+        "lic_commercial": "Commercial-safe",
+        "lic_free": "Attribution-free / CC0",
+        "lic_attribution": "Needs attribution",
+        "results": "{shown} results",
+        "results_filtered": "{shown}/{total} results (filtered)",
+        "translated": "  ·  {src} → {dst}",
+    },
+    "zh": {
+        "search_placeholder": "搜索在线素材（中文会自动翻译成英文）",
+        "search": "搜索",
+        "type": "类型",
+        "license": "授权",
+        "language": "语言",
+        "import": "导入到媒体池",
+        "cancel": "取消",
+        "cancelling": "正在取消…",
+        "searching": "搜索中…",
+        "searching_sources": "正在搜索各素材源…",
+        "select_asset": "选择一个素材",
+        "no_asset": "未选择素材",
+        "no_results": "没有结果",
+        "no_results_hint": "换个关键词，或检查是否缺少 API key。",
+        "no_filter_match": "当前授权筛选下没有结果",
+        "no_filter_match_hint": "放宽授权筛选或更换关键词。",
+        "source_warnings": "素材源警告",
+        "preparing": "准备下载…",
+        "enter_term": "请输入搜索关键词。",
+        "cat_all": "全部",
+        "cat_auto": "自动",
+        "cat_video": "视频",
+        "cat_image": "图片",
+        "cat_music": "音乐",
+        "cat_sfx": "音效",
+        "cat_3d": "3D",
+        "lic_all": "全部授权",
+        "lic_commercial": "仅商用可用",
+        "lic_free": "仅免署名 / CC0",
+        "lic_attribution": "需要署名",
+        "results": "{shown} 条结果",
+        "results_filtered": "{shown}/{total} 条结果（已筛选）",
+        "translated": "  ·  {src} → {dst}",
+    },
+}
+
+
+def tr(lang: str, key: str, **kwargs) -> str:
+    table = TRANSLATIONS.get(lang, TRANSLATIONS["en"])
+    text = table.get(key) or TRANSLATIONS["en"].get(key, key)
+    return text.format(**kwargs) if kwargs else text

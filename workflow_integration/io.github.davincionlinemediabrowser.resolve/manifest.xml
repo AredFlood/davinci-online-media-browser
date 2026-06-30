@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<BlackmagicDesign>
+    <Plugin>
+        <Id>io.github.davincionlinemediabrowser.resolve</Id>
+        <Name>Online Media Browser</Name>
+        <Version>0.2.0</Version>
+        <Description>Search, preview, download, and import online stock media into the current DaVinci Resolve Media Pool.</Description>
+        <FilePath>main.js</FilePath>
+    </Plugin>
+</BlackmagicDesign>

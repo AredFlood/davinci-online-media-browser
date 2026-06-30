@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="no-referrer">
+  <title>DaVinci Online Media Browser</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <nav class="side-rail" aria-label="Media browser sections">
+      <button id="searchViewButton" class="rail-button active" type="button" title="Search" data-view="search">⌕</button>
+      <button id="downloadsViewButton" class="rail-button" type="button" title="Downloads" data-view="downloads">↓</button>
+      <button id="recentViewButton" class="rail-button" type="button" title="Recent" data-view="recent">↺</button>
+      <button id="settingsViewButton" class="rail-button" type="button" title="Settings" data-view="settings">⚙</button>
+    </nav>
+
+    <section class="content-shell">
+      <div id="activityBar" class="activity-bar hidden" aria-hidden="true">
+        <div></div>
+      </div>
+
+      <section class="command-center" aria-label="Search controls">
+        <div class="search-row">
+          <span class="search-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg>
+          </span>
+          <input id="queryInput" class="search" type="search" placeholder="Search stock media">
+          <div class="filter-cluster">
+            <div class="filter" data-filter="category">
+              <button class="filter-icon" type="button" aria-haspopup="true" aria-label="Media type">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1.6"></rect><rect x="14" y="3" width="7" height="7" rx="1.6"></rect><rect x="3" y="14" width="7" height="7" rx="1.6"></rect><rect x="14" y="14" width="7" height="7" rx="1.6"></rect></svg>
+              </button>
+              <div class="filter-menu" role="menu"></div>
+            </div>
+            <div class="filter" data-filter="license">
+              <button class="filter-icon" type="button" aria-haspopup="true" aria-label="License">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3 5 6v5c0 4.4 3 7.6 7 9 4-1.4 7-4.6 7-9V6l-7-3Z"></path><path d="m9 12 2 2 4-4"></path></svg>
+              </button>
+              <div class="filter-menu" role="menu"></div>
+            </div>
+            <div class="filter" data-filter="language">
+              <button class="filter-icon" type="button" aria-haspopup="true" aria-label="Language">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18"></path><path d="M12 3c2.6 2.5 2.6 16 0 18M12 3c-2.6 2.5-2.6 16 0 18"></path></svg>
+              </button>
+              <div class="filter-menu" role="menu"></div>
+            </div>
+          </div>
+          <button id="searchButton" class="primary-search" type="button">Search</button>
+        </div>
+        <select id="categorySelect" class="visually-hidden" tabindex="-1" aria-hidden="true">
+          <option value="all">All</option>
+          <option value="auto" selected>Auto</option>
+          <option value="video">Video</option>
+          <option value="image">Image</option>
+          <option value="music">Music</option>
+          <option value="sfx">SFX</option>
+          <option value="3d">3D</option>
+        </select>
+        <select id="licenseSelect" class="visually-hidden" tabindex="-1" aria-hidden="true">
+          <option value="all">All licenses</option>
+          <option value="commercial">Commercial only</option>
+          <option value="free">No attribution</option>
+          <option value="attribution">Attribution required</option>
+        </select>
+        <select id="languageSelect" class="visually-hidden" tabindex="-1" aria-hidden="true">
+          <option value="zh">中文</option>
+          <option value="en">English</option>
+        </select>
+      </section>
+
+      <section class="workspace">
+        <div id="resultsPanel" class="results-panel">
+          <div id="warningList" class="warning-list hidden"></div>
+          <div id="resultsGrid" class="results-grid"></div>
+          <div id="resultsLoader" class="results-loader hidden" aria-hidden="true"><span></span><span></span><span></span></div>
+          <div id="resultsEnd" class="results-end hidden" aria-hidden="true"></div>
+        </div>
+
+        <section id="downloadManager" class="download-manager hidden" aria-live="polite">
+          <div class="manager-head">
+            <div>
+              <h2 id="downloadManagerTitle">Download Manager</h2>
+              <p id="downloadManagerSubtitle">Background downloads and Media Pool imports</p>
+            </div>
+            <div class="manager-actions">
+              <select id="taskGroupBy" aria-label="Group tasks">
+                <option value="none">Flat</option>
+                <option value="date">By date</option>
+                <option value="project">By project</option>
+              </select>
+              <button id="selectAllTasks" type="button">Select all</button>
+              <button id="copyCreditsButton" type="button" disabled>Copy credits</button>
+              <button id="clearFinishedButton" type="button">Clear finished</button>
+            </div>
+          </div>
+          <div id="downloadTaskList" class="download-task-list"></div>
+        </section>
+
+        <aside id="detailPanel" class="detail-panel collapsed" aria-live="polite">
+          <div class="detail-head">
+            <h1 id="assetTitle">Select an asset</h1>
+            <button id="collapsePreviewButton" class="icon-button" type="button" title="Close preview">×</button>
+          </div>
+          <div id="previewStage" class="preview-stage">
+            <span>No preview loaded</span>
+          </div>
+          <div id="progressWrap" class="progress-wrap hidden">
+            <div id="progressBar" class="progress-bar"></div>
+          </div>
+          <div class="actions">
+            <button id="downloadButton" type="button" disabled>Download</button>
+            <button id="importButton" type="button" disabled>Import to Media Pool</button>
+            <div id="creditButton" class="credit" tabindex="0" role="button" aria-label="Credit">
+              <span class="credit-cat" aria-hidden="true">
+                <svg class="cat-svg" viewBox="0 0 48 48" fill="none" shape-rendering="crispEdges">
+                  <path class="cat-pixel-body" d="M8 14h4v-4h4V6h4v8h8V6h4v4h4v4h4v22h-4v4H12v-4H8z"></path>
+                  <path class="cat-pixel-shadow" d="M12 36h24v4H12z"></path>
+                  <path class="cat-pixel-inner" d="M14 14h4v4h-4zM30 14h4v4h-4z"></path>
+                  <path class="cat-pixel-eye" d="M16 23h4v4h-4zM28 23h4v4h-4z"></path>
+                  <path class="cat-pixel-nose" d="M23 29h2v2h-2zM21 31h2v2h-2zM25 31h2v2h-2z"></path>
+                  <path class="cat-pixel-whisker" d="M4 25h8v2H4zM36 25h8v2h-8zM6 30h7v2H6zM35 30h7v2h-7z"></path>
+                  <g class="cat-pixel-sign">
+                    <path d="M29 28h15v14H29z"></path>
+                    <path class="cat-pixel-sign-edge" d="M27 30h2v10h-2zM44 30h2v10h-2zM31 26h11v2H31zM31 42h11v2H31z"></path>
+                    <path class="cat-pixel-c" d="M35 33h6v2h-6zM33 35h2v4h-2zM35 39h6v2h-6z"></path>
+                  </g>
+                </svg>
+              </span>
+              <div id="creditPop" class="credit-pop"></div>
+            </div>
+            <button id="cancelButton" type="button" class="danger hidden">Cancel</button>
+          </div>
+          <pre id="assetDetails" class="details"></pre>
+        </aside>
+      </section>
+
+      <footer class="topbar">
+        <div class="brand">
+          <strong id="brandTitle">DaVinci Online Media Browser</strong>
+          <span id="statusText">Ready</span>
+        </div>
+        <label id="tokenBox" class="token-box hidden">
+          <span id="tokenLabel">Token</span>
+          <input id="tokenInput" type="password" autocomplete="off" placeholder="Bearer token">
+        </label>
+      </footer>
+    </section>
+  </main>
+
+  <dialog id="apiKeyDialog" class="api-key-dialog">
+    <form id="apiKeyForm" method="dialog">
+      <div class="dialog-head">
+        <div>
+          <h2 id="apiKeyTitle">连接素材平台</h2>
+          <p id="apiKeySubtitle">填写一个或多个 Key，保存时只校验新内容。</p>
+        </div>
+        <button id="apiKeyCloseButton" class="icon-button" value="cancel" type="submit" title="Close">×</button>
+      </div>
+      <a id="apiKeyGuideDialogLink" class="guide-link dialog-guide" href="https://xcnwgzjgckki.feishu.cn/wiki/GAVow1xriivZ4Eke3rBchJ2Knkc" target="_blank" rel="noopener">获取 Key 指南</a>
+
+      <div class="key-section">
+        <h3 id="sectionVideoImage" class="section-title">视频 / 图片平台</h3>
+        <div class="section-body">
+          <div class="key-row" data-field="pexels_api_key">
+            <div class="key-brand">
+              <span class="brand-logo brand-pexels">P</span>
+              <div class="brand-meta"><strong>Pexels</strong><small>图片/视频</small></div>
+            </div>
+            <div class="key-input-wrap">
+              <input id="pexelsKeyInput" name="pexels_api_key" type="password" autocomplete="off" placeholder="填写 API Key">
+              <span class="sweep" aria-hidden="true"></span>
+            </div>
+            <span class="status-pill" id="pexelsKeyStatus">未配置</span>
+            <button class="trash-button" type="button" data-delete="pexels_api_key" title="删除" aria-label="删除">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"></path><path d="M9 7V5h6v2"></path><path d="M6 7l1 13h10l1-13"></path><path d="M10 11v6M14 11v6"></path></svg>
+            </button>
+          </div>
+          <div class="key-row" data-field="pixabay_api_key">
+            <div class="key-brand">
+              <span class="brand-logo brand-pixabay">px</span>
+              <div class="brand-meta"><strong>Pixabay</strong><small>图片/视频</small></div>
+            </div>
+            <div class="key-input-wrap">
+              <input id="pixabayKeyInput" name="pixabay_api_key" type="password" autocomplete="off" placeholder="填写 API Key">
+              <span class="sweep" aria-hidden="true"></span>
+            </div>
+            <span class="status-pill" id="pixabayKeyStatus">未配置</span>
+            <button class="trash-button" type="button" data-delete="pixabay_api_key" title="删除" aria-label="删除">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"></path><path d="M9 7V5h6v2"></path><path d="M6 7l1 13h10l1-13"></path><path d="M10 11v6M14 11v6"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="key-section">
+        <h3 id="sectionAudio" class="section-title">音效平台</h3>
+        <div class="section-body">
+          <div class="key-row key-row-stack">
+            <div class="key-brand">
+              <span class="brand-logo brand-freesound">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12h2l2-5 3 11 3-15 3 13 2-4h3"></path></svg>
+              </span>
+              <div class="brand-meta"><strong>Freesound</strong><small>音效</small></div>
+            </div>
+            <div class="sub-fields">
+              <div class="sub-field" data-field="freesound_client_id">
+                <span class="sub-label">Client ID</span>
+                <div class="key-input-wrap">
+                  <input id="freesoundClientIdInput" name="freesound_client_id" type="password" autocomplete="off" placeholder="填写内容">
+                  <span class="sweep" aria-hidden="true"></span>
+                </div>
+                <span class="status-pill" id="freesoundClientIdStatus">未配置</span>
+                <button class="trash-button" type="button" data-delete="freesound_client_id" title="删除" aria-label="删除">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"></path><path d="M9 7V5h6v2"></path><path d="M6 7l1 13h10l1-13"></path><path d="M10 11v6M14 11v6"></path></svg>
+                </button>
+              </div>
+              <div class="sub-field" data-field="freesound_api_key">
+                <span class="sub-label">Client Secret</span>
+                <div class="key-input-wrap">
+                  <input id="freesoundKeyInput" name="freesound_api_key" type="password" autocomplete="off" placeholder="填写内容">
+                  <span class="sweep" aria-hidden="true"></span>
+                </div>
+                <span class="status-pill" id="freesoundKeyStatus">未配置</span>
+                <button class="trash-button" type="button" data-delete="freesound_api_key" title="删除" aria-label="删除">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"></path><path d="M9 7V5h6v2"></path><path d="M6 7l1 13h10l1-13"></path><path d="M10 11v6M14 11v6"></path></svg>
+                </button>
+              </div>
+              <div class="sub-field" data-field="freesound_oauth_access_token">
+                <span class="sub-label">OAuth Token</span>
+                <div class="key-input-wrap">
+                  <input id="freesoundOauthInput" name="freesound_oauth_access_token" type="password" autocomplete="off" placeholder="填写内容">
+                  <span class="sweep" aria-hidden="true"></span>
+                </div>
+                <span class="status-pill" id="freesoundOauthStatus">未配置</span>
+                <button class="trash-button" type="button" data-delete="freesound_oauth_access_token" title="删除" aria-label="删除">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16"></path><path d="M9 7V5h6v2"></path><path d="M6 7l1 13h10l1-13"></path><path d="M10 11v6M14 11v6"></path></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="key-section">
+        <h3 id="sectionFreeKey" class="section-title">免 Key 来源</h3>
+        <div class="section-body">
+          <div class="key-row">
+            <div class="key-brand">
+              <span class="brand-logo brand-mixkit">M</span>
+              <div class="brand-meta"><strong>Mixkit</strong><small id="mixkitEnabledLabel">免 Key 来源</small></div>
+            </div>
+            <label class="switch">
+              <input id="mixkitEnabledInput" type="checkbox" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <pre id="apiKeyError" class="api-key-error hidden"></pre>
+      <div class="dialog-actions">
+        <button id="apiKeyNeverButton" class="ghost-action" value="never" type="button">永不提示</button>
+        <button id="apiKeySaveButton" class="save-glow" value="save" type="submit">保存</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="apiKeySuccessDialog" class="success-dialog">
+    <form method="dialog">
+      <div class="success-burst" aria-hidden="true">
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+      <h2 id="apiKeySuccessTitle">Connected</h2>
+      <p id="apiKeySuccessMessage">API keys saved successfully.</p>
+      <div class="dialog-actions">
+        <button id="apiKeySuccessOkButton" value="ok">OK</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="licenseDialog">
+    <form method="dialog">
+      <h2 id="licenseTitle">License confirmation</h2>
+      <pre id="licenseMessage"></pre>
+      <label class="checkbox-row">
+        <input id="suppressLicenseCheckbox" type="checkbox">
+        <span>Do not show this license reminder again for one month</span>
+      </label>
+      <div class="dialog-actions">
+        <button id="licenseCancelButton" value="cancel">Cancel</button>
+        <button id="licenseOkButton" value="ok">Continue</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>
