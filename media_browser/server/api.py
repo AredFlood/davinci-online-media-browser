@@ -166,7 +166,7 @@ def _handler_for(context: ServerContext) -> type[BaseHTTPRequestHandler]:
                 self._send_json(403, {"error": "forbidden_host"})
                 return
             parsed = urlparse(self.path)
-            if parsed.path in {"/", "/index.html", "/app.js", "/styles.css"}:
+            if parsed.path in {"/", "/index.html", "/app.js", "/styles.css", "/api-key-guide.html"}:
                 self._handle_static(parsed.path)
                 return
             if not self._authorized():

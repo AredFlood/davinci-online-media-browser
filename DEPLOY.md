@@ -72,6 +72,8 @@ Studio 面板可能需要管理员权限写入系统目录。安装脚本会在�
 | Freesound | 音效 | https://freesound.org/apiv2/apply/ |
 | Mixkit | 音乐、音效 | 无需 Key |
 
+如果不熟悉 API Key，先看 [API_KEYS.md](API_KEYS.md)。插件首次配置窗口里的“获取 API Key 教程”会打开本地教程页。
+
 Key 只保存在你的电脑上，不会上传到项目服务器。
 
 ## 卸载

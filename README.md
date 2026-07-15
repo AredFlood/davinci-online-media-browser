@@ -67,6 +67,8 @@ Workspace -> Scripts -> Utility -> Online Media Browser
 | Freesound | 音效 | https://freesound.org/apiv2/apply/ |
 | Mixkit | 音乐、音效 | 无需 Key |
 
+新手步骤见 [API_KEYS.md](API_KEYS.md)。插件配置窗口里的“获取 API Key 教程”也会打开同一份教程的本地页面。
+
 你的 Key 保存在本机：
 
 ```text
