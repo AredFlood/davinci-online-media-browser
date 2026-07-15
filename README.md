@@ -30,7 +30,7 @@ Mixkit 和部分网页解析来源可能会受到网页结构变化或访问限�
 ## 安装
 
 ```bash
-git clone <本仓库地址>
+git clone https://github.com/AredFlood/davinci-online-media-browser.git
 cd davinci-online-media-browser
 chmod +x install.sh
 ./install.sh
